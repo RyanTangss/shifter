@@ -31,26 +31,19 @@ import java.net.InetAddress;
 @EnableConfigurationProperties({ShifterProperties.class, ApplicationProperties.class, ZookeeperProperties.class})
 public class ShifterAutoConfigure {
 
-    private final ZookeeperProperties zookeeperProperties;
-
     private final ShifterProperties shifterProperties;
-
-    private final ApplicationProperties applicationProperties;
 
     @Resource
     private  ServiceDiscovery<Object> serviceDiscovery;
 
-    public ShifterAutoConfigure(ZookeeperProperties zookeeperProperties, ShifterProperties shifterProperties,
-                                ApplicationProperties applicationProperties) {
-        this.zookeeperProperties = zookeeperProperties;
+    public ShifterAutoConfigure(ShifterProperties shifterProperties) {
         this.shifterProperties = shifterProperties;
-        this.applicationProperties = applicationProperties;
     }
 
 
     @Bean(initMethod = "start",destroyMethod = "close")
     public CuratorFramework curatorFramework(){
-        return CuratorFrameworkUtils.curatorFrameworkBuild(zookeeperProperties);
+        return CuratorFrameworkUtils.curatorFrameworkBuild(shifterProperties.getZookeeper());
     }
 
     @Bean(initMethod = "start",destroyMethod = "close")
@@ -64,7 +57,7 @@ public class ShifterAutoConfigure {
     @PostConstruct
     public void registerService() throws Exception {
         ServiceInstance<Object> serviceInstance = ServiceInstance.builder()
-                .name(applicationProperties.getName())
+                .name(shifterProperties.getApplication().getName())
                 .address(InetAddress.getLocalHost().getHostAddress())
                 .port(8080)
                 .build();
@@ -84,11 +77,11 @@ public class ShifterAutoConfigure {
 
             }
         };
-        serviceDiscovery.queryForInstances(applicationProperties.getName()).forEach(serviceInstance -> {
+        serviceDiscovery.queryForInstances(shifterProperties.getApplication().getName()).forEach(serviceInstance -> {
             System.out.println("Existing service: " + serviceInstance);
         });
         serviceDiscovery.serviceCacheBuilder()
-                .name(applicationProperties.getName())
+                .name(shifterProperties.getApplication().getName())
                 .build()
                 .addListener(serviceCacheListener);
     }
