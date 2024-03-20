@@ -2,6 +2,8 @@ package top.ryantang.shifter.autoconfigure.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.RetryPolicy;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.springframework.stereotype.Service;
 import top.ryantang.shifter.autoconfigure.properties.ZookeeperProperties;
@@ -27,8 +29,12 @@ public class ZkUtilsServiceImpl implements ZkUtilsService {
     @Override
     public void connect() {
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 10);
-
-
+        String addr = zookeeperProperties.getAddr();
+        CuratorFramework client = CuratorFrameworkFactory.builder()
+                .connectString(addr)
+                .retryPolicy(retryPolicy)
+                .sessionTimeoutMs(zookeeperProperties.getTimeout())
+                .build();
     }
 
     @Override

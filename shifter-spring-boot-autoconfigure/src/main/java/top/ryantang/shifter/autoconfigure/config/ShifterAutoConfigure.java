@@ -17,4 +17,5 @@ import top.ryantang.shifter.autoconfigure.properties.ShifterProperties;
 //@ConditionalOnClass({, })
 @EnableConfigurationProperties({ShifterProperties.class, ApplicationProperties.class, ZookeeperProperties.class})
 public class ShifterAutoConfigure {
+
 }
