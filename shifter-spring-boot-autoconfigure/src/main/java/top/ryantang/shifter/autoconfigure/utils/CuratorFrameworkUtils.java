@@ -6,8 +6,8 @@ import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.curator.x.discovery.ServiceDiscovery;
 import org.apache.curator.x.discovery.ServiceDiscoveryBuilder;
-
-import java.net.URL;
+import top.ryantang.shifter.autoconfigure.entity.ServiceInstanceEntity;
+import top.ryantang.shifter.autoconfigure.properties.ZookeeperProperties;
 
 /**
  * CuratorFrameworkUtils.class
@@ -18,26 +18,27 @@ import java.net.URL;
  */
 public abstract class CuratorFrameworkUtils {
 
-    public static ServiceDiscovery<Object>serviceDiscoveryBuild(CuratorFramework curatorFramework, String basePath){
-        return ServiceDiscoveryBuilder.builder(Object.class)
-                .basePath(basePath)
+    public static ServiceDiscovery<ServiceInstanceEntity>serviceDiscovery(CuratorFramework curatorFramework){
+        curatorFramework.start();
+        return ServiceDiscoveryBuilder.builder(ServiceInstanceEntity.class)
+                .basePath("/services")
                 .build();
     }
 
     /**
      * 连接zk获取CuratorFramework
-     * @param connectionUrl 连接zk地址
+     * @param zookeeperProperties zk配置信息
      * @return CuratorFramework实例
      */
-    public static CuratorFramework curatorFrameworkBuild(String connectionUrl){
+    public static CuratorFramework curatorFrameworkBuild(ZookeeperProperties zookeeperProperties){
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 10);
-        CuratorFramework curatorFramework = CuratorFrameworkFactory.builder()
-                .connectString(connectionUrl)
+        CuratorFramework client = CuratorFrameworkFactory.builder()
+                .connectString(zookeeperProperties.getAddr())
                 .retryPolicy(retryPolicy)
 //                .sessionTimeoutMs()
-//                .connectionTimeoutMs()
+                .connectionTimeoutMs(zookeeperProperties.getTimeout())
                 .build();
-        curatorFramework.start();
-        return curatorFramework;
+        client.start();
+        return client;
     }
 }
