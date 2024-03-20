@@ -16,6 +16,8 @@ public class ZookeeperProperties {
 
     private String addr;
 
-    private Integer timeout;
+    private Integer connectionTimeout;
+
+    private Integer sessionTimeout;
 
 }

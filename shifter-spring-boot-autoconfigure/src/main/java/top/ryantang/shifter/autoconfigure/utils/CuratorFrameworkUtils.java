@@ -35,8 +35,8 @@ public abstract class CuratorFrameworkUtils {
         CuratorFramework client = CuratorFrameworkFactory.builder()
                 .connectString(zookeeperProperties.getAddr())
                 .retryPolicy(retryPolicy)
-//                .sessionTimeoutMs()
-                .connectionTimeoutMs(zookeeperProperties.getTimeout())
+                .sessionTimeoutMs(zookeeperProperties.getSessionTimeout())
+                .connectionTimeoutMs(zookeeperProperties.getConnectionTimeout())
                 .build();
         client.start();
         return client;
