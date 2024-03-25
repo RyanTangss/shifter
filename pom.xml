@@ -10,13 +10,14 @@
     </parent>
     <groupId>top.ryantang</groupId>
     <artifactId>shifter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${shifter.version}</version>
     <packaging>pom</packaging>
     <name>shifter</name>
     <description>shifter</description>
     <modules>
         <module>shifter-spring-boot-starter</module>
         <module>shifter-spring-boot-autoconfigure</module>
+        <module>shifter-test</module>
     </modules>
     <properties>
         <java.version>11</java.version>

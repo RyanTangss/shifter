@@ -1,7 +1,6 @@
 package top.ryantang.shifter.autoconfigure.properties;
 
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * ZookeeperProperties.class
@@ -11,7 +10,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * Create by Intellij idea!
  */
 @Data
-@ConfigurationProperties(prefix = "shifter.zookeeper")
 public class ZookeeperProperties {
 
     private String addr;

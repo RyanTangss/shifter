@@ -2,6 +2,7 @@ package top.ryantang.shifter.autoconfigure.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
  * ShifterProperties.class
@@ -13,8 +14,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties(prefix = "shifter")
 public class ShifterProperties {
-    private ApplicationProperties application;
-    private ZookeeperProperties zookeeper;
 
+    @NestedConfigurationProperty
+    private ApplicationProperties application = new ApplicationProperties();
 
+    @NestedConfigurationProperty
+    private ZookeeperProperties zookeeper = new ZookeeperProperties();
 }
