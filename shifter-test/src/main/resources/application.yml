@@ -1,0 +1,13 @@
+server:
+  port: 8091
+spring:
+  application:
+    name: shifter-test
+
+shifter:
+  application:
+    name: shifter-test
+  zookeeper:
+    addr: ${zookeeper.address:121.199.30.71}:2181
+    connection-timeout: 60000
+    session-timeout: 60000
